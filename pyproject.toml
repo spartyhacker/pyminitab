@@ -1,0 +1,18 @@
+[tool.poetry]
+name = "pyminitab"
+version = "0.1.2"
+description = "Emulating minitab type plots for engineering projects"
+authors = ["spartyhacker <spartyhacker@outlook.com>"]
+license = "MIT"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = ">=3.9"
+pandas = "^2.2.2"
+matplotlib = "^3.9.0"
+scipy = "^1.13.1"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
