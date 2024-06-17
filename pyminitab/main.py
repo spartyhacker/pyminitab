@@ -15,7 +15,7 @@ def non_none(lst: list):
     return [x for x in lst if x is not None][0]
 
 
-def hist(data: np.ndarray, LSL: float = None, USL: float = None):
+def hist(data: np.ndarray, LSL: float = None, USL: float = None, title: str = ""):
     "generate minitab style histgram with statistic info"
 
     # decide case
@@ -142,8 +142,8 @@ def hist(data: np.ndarray, LSL: float = None, USL: float = None):
         )  # Darker red for the text
 
     # Labels and title
-    ax_main.set_xlabel("Diameter")
-    ax_main.set_title("Process Capability Report for Diameter", fontsize=16, pad=30)
+    # ax_main.set_xlabel("Diameter")
+    ax_main.set_title(title, fontsize=16, pad=30)
 
     # Remove y-axis label and ticks
     ax_main.set_ylabel("")
