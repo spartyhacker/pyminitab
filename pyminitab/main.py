@@ -15,7 +15,9 @@ def non_none(lst: list):
     return [x for x in lst if x is not None][0]
 
 
-def hist(data: np.ndarray, LSL: float = None, USL: float = None, title: str = ""):
+def hist(
+    data: np.ndarray, LSL: float = None, USL: float = None, title: str = "", nbins=None
+):
     "generate minitab style histgram with statistic info"
 
     # decide case
@@ -106,7 +108,7 @@ def hist(data: np.ndarray, LSL: float = None, USL: float = None, title: str = ""
     # Update the bar color to match the provided image color
     bar_color = "#336699"
     count, bins, ignored = ax_main.hist(
-        data, bins=10, density=True, alpha=0.6, color=bar_color, edgecolor="black"
+        data, bins=nbins, density=True, alpha=0.6, color=bar_color, edgecolor="black"
     )
 
     # Add normal distribution curve
@@ -219,7 +221,7 @@ def main():
     USL = 0.6
     LSL = None
     # USL = None
-    fig = hist(data, LSL, USL)
+    fig = hist(data, LSL, USL, nbins=20)
     fig.savefig("test.png")
 
 

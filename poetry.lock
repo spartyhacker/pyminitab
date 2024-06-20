@@ -328,6 +328,22 @@ python-dateutil = ">=2.7"
 dev = ["meson-python (>=0.13.1)", "numpy (>=1.25)", "pybind11 (>=2.6)", "setuptools (>=64)", "setuptools_scm (>=7)"]
 
 [[package]]
+name = "mplcursors"
+version = "0.5.3"
+description = "Interactive data selection cursors for Matplotlib."
+optional = false
+python-versions = ">=3.7"
+files = [
+    {file = "mplcursors-0.5.3.tar.gz", hash = "sha256:cb220c8dffaafde195e138faec5654737267f7685d1f0503618cdc333aca0966"},
+]
+
+[package.dependencies]
+matplotlib = ">=3.1,<3.7.1 || >3.7.1"
+
+[package.extras]
+docs = ["pandas", "pydata_sphinx_theme (!=0.10.1)", "sphinx", "sphinx-gallery"]
+
+[[package]]
 name = "numpy"
 version = "1.26.4"
 description = "Fundamental package for array computing in Python"
@@ -663,4 +679,4 @@ test = ["big-O", "importlib-resources", "jaraco.functools", "jaraco.itertools", 
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.9"
-content-hash = "beb6f3eada91cda5fdd533e1d45443de581376362c01a1086e20d06509acc1dc"
+content-hash = "ce761188e9ddb8226a2649e998159a5cf52bb2895202da20cddf7d8354ca8ff4"
