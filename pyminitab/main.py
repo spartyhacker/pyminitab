@@ -36,31 +36,22 @@ def hist(
     # Calculate statistics
     sample_mean = np.mean(data)
     sample_std = np.std(data, ddof=1)
-    within_std = np.std(data, ddof=1)
 
     # Process capability indices
     Cp = None
     Cpk = None
-    Pp = None
-    Ppk = None
     if case == "two bound":
         Cp = (USL - LSL) / (6 * sample_std)
-        Cpk = min(
-            (USL - sample_mean) / (3 * sample_std),
-            (sample_mean - LSL) / (3 * sample_std),
-        )
-        Pp = (USL - LSL) / (6 * np.std(data))
-        Ppk = min(
-            (USL - sample_mean) / (3 * np.std(data)),
-            (sample_mean - LSL) / (3 * np.std(data)),
-        )
+        Cpl = (sample_mean - LSL) / (6 * sample_std)
+        Cpu = (USL - sample_mean) / (6 * sample_std)
+        Cpk = min(Cpl, Cpu)
     elif case == "one bound":
         if USL is not None:
-            Cpk = (USL - sample_mean) / (3 * sample_std)
-            Ppk = (USL - sample_mean) / (3 * np.std(data))
+            Cpu = (USL - sample_mean) / (6 * sample_std)
+            Cpk = Cpu
         else:
-            Cpk = (sample_mean - LSL) / (3 * sample_std)
-            Ppk = (sample_mean - LSL) / (3 * np.std(data))
+            Cpl = (sample_mean - LSL) / (6 * sample_std)
+            Cpk = Cpl
 
     # Create a figure with a GridSpec layout
     fig = plt.figure(figsize=FIGSIZE)
@@ -76,8 +67,8 @@ def hist(
         stats_text_left = "\n".join(
             (
                 f"Process Data",
-                f"Sample Mean: {sample_mean:.5f}",
-                f"Sample Std Dev: {sample_std:.5f}",
+                f"Sample Mean: {sample_mean:.4f}",
+                f"Sample Std Dev: {sample_std:.4f}",
                 f"Sample N: {len(data)}",
             )
         )
@@ -88,8 +79,8 @@ def hist(
                 f"LSL: {LSL}",
                 f"Target: {target}",
                 f"USL: {USL}",
-                f"Sample Mean: {sample_mean:.5f}",
-                f"Sample Std Dev: {sample_std:.5f}",
+                f"Sample Mean: {sample_mean:.4f}",
+                f"Sample Std Dev: {sample_std:.4f}",
                 f"Sample N: {len(data)}",
             )
         )
@@ -161,10 +152,6 @@ def hist(
     if case == "one bound":
         stats_text_right = "\n".join(
             (
-                f"Overall Capability",
-                f"Ppk: {Ppk:.2f}",
-                f"Cpm: *",
-                "",
                 f"Potential (Within) Capability",
                 f"Cpk: {Cpk:.2f}",
             )
@@ -180,16 +167,10 @@ def hist(
         stats_text_right = "\n".join(
             (
                 f"Overall Capability",
-                f"Pp: {Pp:.2f}",
-                f"PPL: {Pp - Cpk:.2f}",
-                f"PPU: {Pp + Cpk:.2f}",
-                f"Ppk: {Ppk:.2f}",
-                f"Cpm: *",
-                "",
                 f"Potential (Within) Capability",
                 f"Cp: {Cp:.2f}",
-                f"CPL: {Cp - Cpk:.2f}",
-                f"CPU: {Cp + Cpk:.2f}",
+                f"CPL: {Cpl:.2f}",
+                f"CPU: {Cpu:.2f}",
                 f"Cpk: {Cpk:.2f}",
             )
         )
@@ -217,10 +198,8 @@ def main():
     data = np.random.normal(loc=0.546, scale=0.019, size=100)
 
     # Specifications
-    # LSL = 0.5
+    LSL = 0.5
     USL = 0.6
-    LSL = None
-    # USL = None
     fig = hist(data, LSL, USL, nbins=20)
     fig.savefig("test.png")
 
