@@ -42,15 +42,15 @@ def hist(
     Cpk = None
     if case == "two bound":
         Cp = (USL - LSL) / (6 * sample_std)
-        Cpl = (sample_mean - LSL) / (6 * sample_std)
-        Cpu = (USL - sample_mean) / (6 * sample_std)
+        Cpl = (sample_mean - LSL) / (3 * sample_std)
+        Cpu = (USL - sample_mean) / (3 * sample_std)
         Cpk = min(Cpl, Cpu)
     elif case == "one bound":
         if USL is not None:
-            Cpu = (USL - sample_mean) / (6 * sample_std)
+            Cpu = (USL - sample_mean) / (3 * sample_std)
             Cpk = Cpu
         else:
-            Cpl = (sample_mean - LSL) / (6 * sample_std)
+            Cpl = (sample_mean - LSL) / (3 * sample_std)
             Cpk = Cpl
 
     # Create a figure with a GridSpec layout
@@ -199,7 +199,8 @@ def main():
 
     # Specifications
     LSL = 0.5
-    USL = 0.6
+    # USL = 0.6
+    USL = None
     fig = hist(data, LSL, USL, nbins=20)
     fig.savefig("test.png")
 
