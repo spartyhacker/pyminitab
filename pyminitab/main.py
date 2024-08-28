@@ -8,7 +8,7 @@ from scipy.stats import norm
 from matplotlib.patches import Rectangle
 
 # parameters
-FIGSIZE = (10, 5)
+FIGSIZE = (9, 5)
 
 
 def non_none(lst: list):
@@ -41,6 +41,8 @@ def hist(
     Cp = None
     Cpk = None
     if case == "two bound":
+        if LSL > USL:
+            raise "LSL larger than USL, please re-assign"
         Cp = (USL - LSL) / (6 * sample_std)
         Cpl = (sample_mean - LSL) / (3 * sample_std)
         Cpu = (USL - sample_mean) / (3 * sample_std)
@@ -55,7 +57,7 @@ def hist(
 
     # Create a figure with a GridSpec layout
     fig = plt.figure(figsize=FIGSIZE)
-    gs = fig.add_gridspec(1, 3, width_ratios=[1, 2, 1])
+    gs = fig.add_gridspec(1, 3, width_ratios=[1, 4, 1])
 
     # Set the figure background color
     fig.patch.set_facecolor("lightgrey")
@@ -73,12 +75,27 @@ def hist(
             )
         )
     else:
+        if target:
+            target_txt = f"Target: {target:.4f}"
+        else:
+            target_txt = "Target: None"
+
+        if LSL:
+            LSL_txt = f"LSL: {LSL:.4f}"
+        else:
+            LSL_txt = "LSL: None"
+
+        if USL:
+            USL_txt = f"USL: {USL:.4f}"
+        else:
+            USL_txt = "USL: None"
+
         stats_text_left = "\n".join(
             (
                 f"Process Data",
-                f"LSL: {LSL}",
-                f"Target: {target}",
-                f"USL: {USL}",
+                LSL_txt,
+                target_txt,
+                USL_txt,
                 f"Sample Mean: {sample_mean:.4f}",
                 f"Sample Std Dev: {sample_std:.4f}",
                 f"Sample N: {len(data)}",
@@ -152,7 +169,7 @@ def hist(
     if case == "one bound":
         stats_text_right = "\n".join(
             (
-                f"Potential (Within) Capability",
+                # f"Potential (Within) Capability",
                 f"Cpk: {Cpk:.2f}",
             )
         )
@@ -166,8 +183,8 @@ def hist(
     elif case == "two bound":
         stats_text_right = "\n".join(
             (
-                f"Overall Capability",
-                f"Potential (Within) Capability",
+                # f"Overall Capability",
+                # f"Potential (Within) Capability",
                 f"Cp: {Cp:.2f}",
                 f"CPL: {Cpl:.2f}",
                 f"CPU: {Cpu:.2f}",
@@ -192,7 +209,50 @@ def hist(
     return fig
 
 
-def main():
+def spc(data: np.ndarray, LSL: float = None, USL: float = None, title: str = ""):
+    "draw SPC chart"
+    fig = plt.figure(figsize=FIGSIZE)
+    ax1 = fig.add_subplot(2, 1, 1)
+    ax2 = fig.add_subplot(2, 1, 2)
+
+    # top plot
+    ax1.plot(data, "-o")
+    ax1.set_xticklabels([])
+    ax1.set_ylabel("Individual Value")
+
+    ax1.axhline(USL, linestyle="--", color="red")
+    xmin, xmax = ax1.get_xlim()
+    ax1.text(xmax, USL, "USL", fontdict={"size": 10, "color": "red"})
+
+    ax1.axhline(LSL, linestyle="--", color="red")
+    ax1.text(xmax, LSL, "LSL", fontdict={"size": 10, "color": "red"})
+
+    ax1.axhline(data.mean(), linestyle="-", color="green")
+    ax1.text(
+        xmax,
+        data.mean(),
+        f"Avg = {data.mean():.3}",
+        fontdict={"size": 10, "color": "green"},
+    )
+
+    # bottom plot
+    diff_val = np.diff(data)
+    ax2.plot(diff_val, "-o")
+    ax2.set_ylabel("Moving Range")
+    ax2.axhline(diff_val.mean(), linestyle="-", color="green")
+    ax2.text(
+        xmax,
+        diff_val.mean(),
+        f"Avg = {diff_val.mean():.3}",
+        fontdict={"size": 10, "color": "green"},
+    )
+    fig.patch.set_facecolor("lightgrey")
+
+    ax1.set_title(title)
+    return fig
+
+
+def test_hist():
     # Generate some sample data
     np.random.seed(42)
     data = np.random.normal(loc=0.546, scale=0.019, size=100)
@@ -201,8 +261,18 @@ def main():
     LSL = 0.5
     # USL = 0.6
     USL = None
-    fig = hist(data, LSL, USL, nbins=20)
+    fig = hist(data, LSL, USL, nbins=20, title="test plot")
     fig.savefig("test.png")
+
+
+def test_spc():
+    data = np.random.normal(loc=0.546, scale=0.019, size=100)
+    fig = spc(data, title="test SPC", LSL=0.45, USL=0.6)
+    fig.savefig("test.png")
+
+
+def main():
+    test_spc()
 
 
 if __name__ == "__main__":
