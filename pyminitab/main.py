@@ -219,13 +219,15 @@ def spc(data: np.ndarray, LSL: float = None, USL: float = None, title: str = "")
     ax1.plot(data, "-o")
     ax1.set_xticklabels([])
     ax1.set_ylabel("Individual Value")
-
-    ax1.axhline(USL, linestyle="--", color="red")
     xmin, xmax = ax1.get_xlim()
-    ax1.text(xmax, USL, "USL", fontdict={"size": 10, "color": "red"})
 
-    ax1.axhline(LSL, linestyle="--", color="red")
-    ax1.text(xmax, LSL, "LSL", fontdict={"size": 10, "color": "red"})
+    if USL is not None:
+        ax1.axhline(USL, linestyle="--", color="red")
+        ax1.text(xmax, USL, "USL", fontdict={"size": 10, "color": "red"})
+
+    if LSL is not None:
+        ax1.axhline(LSL, linestyle="--", color="red")
+        ax1.text(xmax, LSL, "LSL", fontdict={"size": 10, "color": "red"})
 
     ax1.axhline(data.mean(), linestyle="-", color="green")
     ax1.text(
@@ -240,6 +242,7 @@ def spc(data: np.ndarray, LSL: float = None, USL: float = None, title: str = "")
     ax2.plot(diff_val, "-o")
     ax2.set_ylabel("Moving Range")
     ax2.axhline(diff_val.mean(), linestyle="-", color="green")
+    xmin, xmax = ax2.get_xlim()
     ax2.text(
         xmax,
         diff_val.mean(),

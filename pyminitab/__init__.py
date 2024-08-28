@@ -1,3 +1,3 @@
-from .main import hist
+from .main import hist, spc
 
-__all__ = ["hist"]
+__all__ = ["hist", "spc"]
