@@ -24,7 +24,9 @@ def test_box_category():
     xl_data = pd.read_excel(r"tests\data.xlsx")
     cat = xl_data["cat"]
     val = xl_data["val"]
-    fig = pyminitab.box(val, cat, LSL=0, USL=200, title="Test Plot")
+    fig = pyminitab.box(
+        val, cat, LSL=0, USL=200, title="Test Plot", width=0.5, fill=False
+    )
     fig.savefig("test_output/cat_box.png")
     assert all(fig.get_size_inches() == [7, 5])
 

@@ -262,16 +262,17 @@ def box(
     LSL: float = None,
     USL: float = None,
     title: str = "",
+    **kargs,
 ):
     FIGSIZE_2 = (7, 5)
     fig, ax = plt.subplots(1, 1, figsize=FIGSIZE_2)
     fig.patch.set_facecolor("lightgrey")
     if category is None:
         # ax.boxplot(data, category)
-        sns.boxplot(y=data)
+        sns.boxplot(y=data, **kargs)
     else:
         assert len(category) == len(data), "category and data not equal in length"
-        sns.boxplot(x=category, y=data)
+        sns.boxplot(x=category, y=data, **kargs)
         ax.set_xlabel("Category")
         ax.set_ylabel("Value")
 
