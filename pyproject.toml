@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "pyminitab"
-version = "0.3.2"
+version = "0.4.0"
 description = "Emulating minitab type plots for engineering projects"
 authors = ["spartyhacker <spartyhacker@outlook.com>"]
 license = "MIT"
@@ -11,6 +11,7 @@ python = ">=3.9"
 pandas = ">=1.5.2"
 matplotlib = ">=3.7.0"
 scipy = ">=1.9.3"
+seaborn = ">=0.13.0"
 
 
 [build-system]
