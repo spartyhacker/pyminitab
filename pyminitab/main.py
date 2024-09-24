@@ -5,7 +5,8 @@ Generate minitab like plots
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy.stats import norm
-from matplotlib.patches import Rectangle
+from typing import Union
+import seaborn as sns
 
 # parameters
 FIGSIZE = (9, 5)
@@ -255,6 +256,40 @@ def spc(data: np.ndarray, LSL: float = None, USL: float = None, title: str = "")
     return fig
 
 
+def box(
+    data: np.ndarray,
+    category: Union[None, np.ndarray] = None,
+    LSL: float = None,
+    USL: float = None,
+    title: str = "",
+):
+    FIGSIZE_2 = (7, 5)
+    fig, ax = plt.subplots(1, 1, figsize=FIGSIZE_2)
+    fig.patch.set_facecolor("lightgrey")
+    if category is None:
+        # ax.boxplot(data, category)
+        sns.boxplot(y=data)
+    else:
+        assert len(category) == len(data), "category and data not equal in length"
+        sns.boxplot(x=category, y=data)
+        ax.set_xlabel("Category")
+        ax.set_ylabel("Value")
+
+    ax.set_title(title)
+    xmin, xmax = ax.get_xlim()
+
+    # set the limits
+    if USL is not None:
+        ax.axhline(USL, linestyle="--", color="red")
+        ax.text(xmax, USL, "USL", fontdict={"size": 10, "color": "red"})
+    if LSL is not None:
+        ax.axhline(LSL, linestyle="--", color="red")
+        ax.text(xmax, LSL, "LSL", fontdict={"size": 10, "color": "red"})
+
+    return fig
+
+
+# testing
 def test_hist():
     # Generate some sample data
     np.random.seed(42)
@@ -272,11 +307,3 @@ def test_spc():
     data = np.random.normal(loc=0.546, scale=0.019, size=100)
     fig = spc(data, title="test SPC", LSL=0.45, USL=0.6)
     fig.savefig("test.png")
-
-
-def main():
-    test_spc()
-
-
-if __name__ == "__main__":
-    main()
