@@ -262,6 +262,9 @@ def box(
     LSL: float = None,
     USL: float = None,
     title: str = "",
+    ymin: float = None,
+    ymax: float = None,
+    swarm: bool = False,
     **kargs,
 ):
     FIGSIZE_2 = (7, 5)
@@ -270,9 +273,13 @@ def box(
     if category is None:
         # ax.boxplot(data, category)
         sns.boxplot(y=data, **kargs)
+        if swarm:
+            sns.swarmplot(y=data)
     else:
         assert len(category) == len(data), "category and data not equal in length"
         sns.boxplot(x=category, y=data, **kargs)
+        if swarm:
+            sns.swarmplot(x=category, y=data)
         ax.set_xlabel("Category")
         ax.set_ylabel("Value")
 
@@ -286,6 +293,14 @@ def box(
     if LSL is not None:
         ax.axhline(LSL, linestyle="--", color="red")
         ax.text(xmax, LSL, "LSL", fontdict={"size": 10, "color": "red"})
+
+    # set y axis limit
+    ymin_set, ymax_set = ax.get_ylim()
+    if ymin is not None:
+        ymin_set = ymin
+    if ymax is not None:
+        ymax_set = ymax
+    ax.set_ylim(ymin_set, ymax_set)
 
     return fig
 

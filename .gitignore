@@ -4,4 +4,4 @@ test.png
 pyminitab/__pycache__/
 tests/__pycache__/draw_test.cpython-312-pytest-8.3.3.pyc
 tests/__pycache__/draw_test.cpython-312-pytest-8.3.3.pyc.2472
-test_output/cat_box.png
+test_output/

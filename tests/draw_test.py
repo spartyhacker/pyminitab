@@ -31,6 +31,51 @@ def test_box_category():
     assert all(fig.get_size_inches() == [7, 5])
 
 
+def test_box_ylim():
+    xl_data = pd.read_excel(r"tests\data.xlsx")
+    val = xl_data["val"]
+    fig = pyminitab.box(
+        val, LSL=0, USL=200, title="Test Plot", width=0.5, fill=False, ymin=0, ymax=250
+    )
+    fig.savefig("test_output/ylim_box.png")
+    assert all(fig.get_size_inches() == [7, 5])
+
+
+def test_box_swarm():
+    xl_data = pd.read_excel(r"tests\data.xlsx")
+    cat = xl_data["cat"]
+    val = xl_data["val"]
+    fig = pyminitab.box(
+        val,
+        LSL=-10,
+        USL=200,
+        title="Test Plot",
+        width=0.5,
+        fill=False,
+        ymin=0,
+        ymax=250,
+        swarm=True,
+    )
+    fig.savefig("test_output/swarm_box.png")
+
+    # with category
+    fig2 = pyminitab.box(
+        val,
+        cat,
+        LSL=0,
+        USL=200,
+        title="Test Plot",
+        width=0.5,
+        fill=False,
+        ymin=-10,
+        ymax=250,
+        swarm=True,
+    )
+    fig2.savefig("test_output/swarm_category_box.png")
+    assert all(fig.get_size_inches() == [7, 5])
+    assert all(fig2.get_size_inches() == [7, 5])
+
+
 def main():
     test_box()
 
