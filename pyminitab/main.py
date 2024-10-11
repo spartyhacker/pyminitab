@@ -265,6 +265,8 @@ def box(
     ymin: float = None,
     ymax: float = None,
     swarm: bool = False,
+    xlabel: str = None,
+    ylabel: str = None,
     **kargs,
 ):
     FIGSIZE_2 = (7, 5)
@@ -301,6 +303,12 @@ def box(
     if ymax is not None:
         ymax_set = ymax
     ax.set_ylim(ymin_set, ymax_set)
+
+    # set x,y labels
+    if xlabel is not None:
+        ax.set_xlabel(xlabel)
+    if ylabel is not None:
+        ax.set_ylabel(ylabel)
 
     return fig
 

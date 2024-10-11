@@ -8,7 +8,16 @@ def test_box():
     data = np.random.normal(loc=0.546, scale=0.019, size=100)
     fig = pyminitab.box(data, USL=1, LSL=0.4)
     assert all(fig.get_size_inches() == [7, 5])
-    fig.savefig("test.png")
+    fig.savefig("test_output/test.png")
+
+
+def test_box_xylabel():
+    data = np.random.normal(loc=0.546, scale=0.019, size=100)
+    xlabel = "x label test"
+    ylabel = "y label test"
+    fig = pyminitab.box(data, USL=1, LSL=0.4, xlabel=xlabel, ylabel=ylabel)
+    assert all(fig.get_size_inches() == [7, 5])
+    fig.savefig("test_output/test_xylabel.png")
 
 
 def test_box_category_unequal_data():
